@@ -1,0 +1,7 @@
+{
+	"prefix": "&",
+    "token": "TOKEN HERE",
+    "mongoPath": "MONGO DB IN HERE",
+    "owners": ["OWNER ID IN HERE"],
+    "admin": ["ADMIN ID IN HERE"]
+}
