@@ -21,7 +21,7 @@ module.exports = class extends Command {
 			const host = await checking.host;
 			if(host === true) {
 				console.log(args.length);
-				if(args[0] === 'manual' && args.length !== 9) return message.reply(`incorrect syntax!\nUse **${this.client.prefix}raid guide** for information on the correct syntax`);
+				if(args[0] === 'manual' && args.length > 9) return message.reply(`incorrect syntax!\nUse **${this.client.prefix}raid guide** for information on the correct syntax`);
 				if(args[0] === 'guide' && args.length !== 1) return message.reply(`incorrect syntax!\nUse **${this.client.prefix}raid guide** for information on the correct syntax`);
 				if(args[0] === 'auto' && args.length > 10) return message.reply(`incorrect syntax!\nUse **${this.client.prefix}raid guide** for information on the correct syntax`);
 				if(args[0] === 'send' && args.length !== 1) return message.reply(`incorrect syntax!\nUse **${this.client.prefix}raid guide** for information on the correct syntax`);
