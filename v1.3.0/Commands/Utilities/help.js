@@ -1,6 +1,12 @@
 const { MessageEmbed } = require('discord.js');
 const check = require('../../Structures/user.js');
 const Command = require('../../Structures/Command');
+const { Permissions } = require('discord.js');
+const permissions = new Permissions([
+	'MANAGE_CHANNELS',
+]);
+let flag = 0;
+
 module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
@@ -15,8 +21,8 @@ module.exports = class extends Command {
 		const checking = await check.checkUser(id, tag);
 		let host = false;
 		checking !== null ? host = await checking.host : host;
-		let flag = 0;
-		if(checking.user === false) {
+
+		if(!checking.block) {
 			const embed = new MessageEmbed()
 				.setColor('BLUE')
 				.setAuthor(`${this.client.user.username} Help Menu`, message.guild.iconURL({ dynamic: true }))
@@ -26,7 +32,7 @@ module.exports = class extends Command {
 			if(command) {
 				const cmd = this.client.commands.get(command) || this.client.commands.get(this.aliases.get(command));
 
-				if(!cmd) return message.channel.send(`Invalid command named:  \`${command}`);
+				if(!cmd) return message.channel.send(`Invalid command named:  \`${command}\``);
 
 				embed.setAuthor(`${this.client.utils.capitalise(cmd.name)} Command Help`, this.client.user.displayAvatarURL());
 				embed.setDescription([
@@ -47,7 +53,7 @@ module.exports = class extends Command {
 
 				]);
 				let categories;
-				if (!this.client.owners.includes(message.author.id) && !this.client.admin.includes(message.author.id)) {
+				if (!this.client.owners.includes(message.author.id) && !message.member.hasPermission(permissions)) {
 					host ? categories = this.client.utils.removeDuplicates(this.client.commands.filter(cmd =>
 						!cmd.category.includes('Owner') && !cmd.category.includes('Admin'))
 						.map(cmd => cmd.category)) :
@@ -70,13 +76,14 @@ module.exports = class extends Command {
 			}
 
 		}
-		if(checking.block === true) {
+		if(checking.block && flag < 3) {
 			message.reply('you are blocked from using me!');
-			flag++;
+			return flag++;
 		}
-		if(flag > 3) {
-			message.channel.send('<@' + this.client.admin[0] + '> a user has been blocked and is still trying to use me!\n the user is: <@' + id + '>');
+		if(flag >= 3) {
+			await check.autoModeration(id, tag, message);
 			message.client.users.cache.get(this.client.owners[0]).send('Master this user tried to use me after being blocked! <@' + id + '>');
+			return;
 		}
 	}
 };
