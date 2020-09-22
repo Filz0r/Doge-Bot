@@ -44,7 +44,6 @@ module.exports.flagUser = async (id) => {
 module.exports.autoModeration = async (id, tag, message) => {
 	// eslint-disable-next-line prefer-const
 	let { block, flags, ignoreFlags } = await this.checkUser(id, tag);
-	console.log('before', block);
 	if(flags < 0) return console.log(`ERROR: user ${ tag } has invalid flags: ${ flags }`);
 	if(flags > 10) return console.log(`ERROR: user ${ tag } has invalid flags ${ flags }`);
 	if(ignoreFlags < 0) return console.log(`ERROR: user ${ tag } has invalid flags: ${ flags }`);
@@ -59,7 +58,7 @@ module.exports.autoModeration = async (id, tag, message) => {
 		}
 		else {
 			console.log(`user ${ tag } was flagged ${ flags } times!`);
-			return message.reply(`You are not allowed to use/do this!\nCurrent flags: ${flags}/10`);
+			return message.reply(`You are not allowed to use/do this!\n\`Current flags: ${flags}/10\``);
 		}
 	}
 	else if(block) {
@@ -72,7 +71,7 @@ module.exports.autoModeration = async (id, tag, message) => {
 		}
 		else {
 			console.log(`${ tag }, is working his way up to me ignoring him ${ ignoreFlags }`);
-			return message.reply(`I already blocked you, if you keep trying I'll start ignoring you!\nFlags:${ ignoreFlags }/10`);
+			return message.reply(`I already blocked you, if you keep trying I'll start ignoring you!\n\`Flags:${ ignoreFlags }/10\``);
 		}
 	}
 };
