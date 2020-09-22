@@ -19,8 +19,8 @@ const string = {
 const giveawaySchema = mongoose.Schema({
 	_id: reqString,
 	ign: string,
-	code1: Num,
-	code2: Num,
+	code1: string,
+	code2: string,
 	dd: string,
 	ping: string,
 	desc: string,
