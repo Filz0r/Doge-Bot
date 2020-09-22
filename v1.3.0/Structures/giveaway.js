@@ -34,7 +34,7 @@ module.exports.setInfo = async (id, args, message) => {
 				dd: args[4],
 				ping: args[5],
 			});
-			message.client.users.cache.get(id).send('Your trade code is ' + codes.code1 + '-' + codes.code2 + '!');
+			message.client.users.cache.get(id).send(`Your trade code is  \`${ codes.code1 }-${ codes.code2 }\``);
 		}
 		else {
 			await GIVESCHEMA.findOneAndUpdate({
@@ -62,7 +62,7 @@ module.exports.setInfo = async (id, args, message) => {
 				dd: args[4],
 				ping: args[5],
 			}).save();
-			message.client.users.cache.get(id).send('Your trade code is ' + codes.code1 + '-' + codes.code2 + '!');
+			message.client.users.cache.get(id).send(`Your trade code is  \`${ codes.code1 }-${ codes.code2 }\``);
 		}
 		else {
 			await new GIVESCHEMA({
@@ -98,9 +98,6 @@ module.exports.setList = async (id, args) => {
 			i = i + 2;
 			data.push(mons);
 		} while (i < argnum);
-		/* console.log(data);
-		console.log(mons);
-		console.log(args); */
 		return await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: data	});
 	}
 	else if (list === null) {
@@ -187,7 +184,7 @@ module.exports.editList = async (id, args, message, prefix) => {
 	}
 
 };
-
+// sends the layout as a message
 module.exports.sendMsg = async (id, prefix, message) => {
 	i = 0;
 	const result = await GIVESCHEMA.findById({ _id: id });
@@ -212,8 +209,7 @@ module.exports.sendMsg = async (id, prefix, message) => {
 	}
 
 };
-
-// eslint-disable-next-line no-unused-vars
+// checks if the giveaway are valid before interacting with the db
 module.exports.check = async (id, mon, message) => {
 	const { list } = await GIVESCHEMA.findOne({
 		_id: id,
@@ -223,9 +219,33 @@ module.exports.check = async (id, mon, message) => {
 		message.reply('your giveaway has already ended!');
 		return false;
 	}
-	if (!list.mon.includes(`${ mon}`)) {
-		message.reply(`that pokemon is not on your list\nAvailable pokemon: \`${list.mon.join(', ')}\`\nPokemon given: \`${ mon }\``);
+	if (!list.mon.includes(`${ mon }`)) {
+		message.reply(`that pokemon is not on your list!\nAvailable pokemon: \`${list.mon.join(', ')}\`\nPokemon given: \`${ mon }\``);
 		return false;
 	}
 	return true;
+};
+// changes the code if the user asks for this function to be executed
+module.exports.randCodeChange = async (id) => {
+	const codes = await this.randCode();
+	await GIVESCHEMA.findOneAndUpdate({
+		_id: id,
+	},
+	{
+		code1: codes.code1,
+		code2: codes.code2,
+	});
+	return codes;
+};
+
+// sets a personalized description for the layout
+module.exports.setDesc = async (id, text) => {
+	const desc = await text;
+	await GIVESCHEMA.findOneAndUpdate({
+		_id: id,
+	},
+	{
+		desc: desc,
+	});
+	return desc;
 };
