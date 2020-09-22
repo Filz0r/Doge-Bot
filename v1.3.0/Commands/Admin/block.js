@@ -1,5 +1,9 @@
 const Command = require('../../Structures/Command.js');
 const userScheema = require('../../schemas/userSchema');
+const { Permissions } = require('discord.js');
+const permissions = new Permissions([
+	'MANAGE_CHANNELS',
+]);
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -15,7 +19,7 @@ module.exports = class extends Command {
 	async run(message) {
 		const masterID = this.client.owners[0];
 		const { id } = message.author;
-		if(this.client.owners.includes(id) || this.client.admin.includes(id)) {
+		if(this.client.owners.includes(id) || message.member.hasPermission(permissions)) {
 			const { mentions } = message;
 			const target = mentions.users.first();
 			const newUser = target.id;
