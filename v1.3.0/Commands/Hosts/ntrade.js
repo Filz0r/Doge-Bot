@@ -23,11 +23,12 @@ module.exports = class extends Command {
 			if (argnum > 2) return message.reply('incorrect syntax!');
 			if (argnum === 2 && args[1] !== 'change') return message.reply('incorrect syntax!');
 			if (argnum === 2 && args[1] === 'change') {
-				await GIVEAWAY.editList(id, args, message, this.client.prefix);
-				// const msg = await giveaway.sendMsg(id);
-				// message.channel.send(msg);
-				// const codes = await GIVEAWAY.randCodeChange(id);
-				// return message.client.users.cache.get(id).send('Your trade code is ' + codes.code1 + '-' + codes.code2 + '!');
+				const edits = await GIVEAWAY.editList(id, args, message, this.client.prefix);
+				if (!edits) return;
+				const msg = await GIVEAWAY.sendMsg(id);
+				message.reply(`is hosting the following giveaway: ${ msg }`);
+				const codes = await GIVEAWAY.randCodeChange(id);
+				return message.client.users.cache.get(id).send(`Your next trade code is  \`${ codes.code1 }-${ codes.code2 }\``);
 			}
 			else {
 				const edits = await GIVEAWAY.editList(id, args, message, this.client.prefix);
