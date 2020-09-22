@@ -17,8 +17,9 @@ module.exports = class extends Command {
 		const { id, tag } = message.author;
 		const { host } = await USER.checkUser(id, tag, message);
 		if(host) {
-            const argnum = args.length;
-            const mon = await GIVEAWAY.checkMon(id, args[0], message);
+			const argnum = args.length;
+			const check = await GIVEAWAY.check(id, args[0], message);
+			if(!check) return;
 			if (argnum > 2) return message.reply('incorrect syntax!');
 			if (argnum === 2 && args[1] !== 'change') return message.reply('incorrect syntax!');
 			if (argnum === 2 && args[1] === 'change') {
@@ -29,7 +30,8 @@ module.exports = class extends Command {
 				// return message.client.users.cache.get(id).send('Your trade code is ' + codes.code1 + '-' + codes.code2 + '!');
 			}
 			else {
-				await GIVEAWAY.editList(id, args, message, this.client.prefix);
+				const edits = await GIVEAWAY.editList(id, args, message, this.client.prefix);
+				if (!edits) return;
 				const msg = await GIVEAWAY.sendMsg(id, this.client.prefix, message);
 				return message.reply(`is hosting the following giveaway: ${ msg }`);
 			}
