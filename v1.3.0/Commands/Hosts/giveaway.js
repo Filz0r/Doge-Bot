@@ -15,19 +15,19 @@ module.exports = class extends Command {
 		});
 	}
 	// eslint-disable-next-line no-unused-vars
-	async run(message, args) {
+	async run(message, args, text) {
 		const { id, tag } = message.author;
 		const { host } = await USER.checkUser(id, tag, message);
 		const argnum = args.length;
 		if(host) {
-			if (args[0] === 'start' && argnum > 2) return message.reply(`incorrect syntax! Use **${this.client.prefix}ga guide** for help!`);
-			if (args[0] === 'info' && argnum !== 6) return message.reply(`incorrect syntax! Use **${this.client.prefix}ga guide** for help!`);
-			if (argnum >= 61) return message.reply('you are trying to give to many pokemon, limit is 30!');
-			if(args[0] === 'start' && args[1] === 'change') {
-				// const msg = await giveaway.sendMsg(id);
-				// message.reply('is starting the following giveaway!\n' + msg);
-				// const codes = await giveaway.randCodeChange(id);
-				// return message.client.users.cache.get(id).send('Your trade code is ' + codes.code1 + '-' + codes.code2 + '!');
+			if (args[0] === 'start' && argnum > 2) return message.reply(`incorrect syntax!\n Use \`${this.client.prefix}${ this.client.commands.get('giveaway').name} guide\` for help!`);
+			if (args[0] === 'info' && argnum !== 6) return message.reply(`incorrect syntax!\n Use \`${this.client.prefix}${ this.client.commands.get('giveaway').name} guide\` for help!`);
+			if (args[0] !== 'desc' && argnum >= 61) return message.reply('you are trying to give to many pokemon, limit is 30!');
+			if (args[0] === 'start' && args[1] === 'change') {
+				const msg = await GIVEAWAY.sendMsg(id);
+				message.reply('is starting the following giveaway!\n' + msg);
+				const codes = await GIVEAWAY.randCodeChange(id);
+				return message.client.users.cache.get(id).send(`Your next trade code is  \`${ codes.code1 }-${ codes.code2 }\``);
 			}
 			else if (args[0] === 'start') {
 				const msg = await GIVEAWAY.sendMsg(id, this.client.prefix, message);
@@ -78,7 +78,14 @@ module.exports = class extends Command {
 					});
 				});
 			}
-			if(args[0] !== 'info' && args[0] !== 'start' && args[0] !== 'guide') {
+			if (args[0] === 'desc') {
+				const info = args;
+				const textConv = info.slice(1, args.length).join(' ');
+				console.log(textConv);
+				await GIVEAWAY.setDesc(id, textConv);
+				return message.reply('your custom description is set!');
+			}
+			if(args[0] !== 'info' && args[0] !== 'start' && args[0] !== 'guide' && args[0] !== 'desc') {
 				await GIVEAWAY.setList(id, args, message);
 				return message.reply('your list has been stored!');
 			}
