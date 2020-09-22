@@ -101,7 +101,7 @@ module.exports.setList = async (id, args) => {
 		/* console.log(data);
 		console.log(mons);
 		console.log(args); */
-		return await GIVESCHEMA.findOneAndUpdate({ _id: id }, { 'list': data	});
+		return await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: data	});
 	}
 	else if (list === null) {
 		data = [];
@@ -116,7 +116,7 @@ module.exports.setList = async (id, args) => {
 			i = i + 2;
 			data.push(mons);
 		} while (i < argnum);
-		return await new GIVESCHEMA({ _id: id, 'list': data	}).save();
+		return await new GIVESCHEMA({ _id: id, list: data	}).save();
 	}
 };
 // edits the list of pokemon when the user is hosting the giveaway
@@ -158,7 +158,7 @@ module.exports.editList = async (id, args, message, prefix) => {
 		// verifies if the quant and status before deducting and breaks if both are true
 		if (quant[index] === 0 && sta[index] === false) {
 			message.reply('you don\'t have anymore of that already!');
-			return;
+			return false;
 		}
 		// to change the status to false for when the list only has one mon
 		if (quant[index] <= 1 && listLen === 1) {
@@ -166,8 +166,8 @@ module.exports.editList = async (id, args, message, prefix) => {
 			quant[index] -= 1;
 			const test = listBuiler(list);
 			await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: test	});
-			message.reply('you don\'t have anymore of that already!');
-			return test;
+			message.reply('has ended his giveaway!');
+			return false;
 		}
 		// to change the status to false when the list has more than one mon
 		else if (quant[index] <= 1 && listLen > 1) {
@@ -175,14 +175,14 @@ module.exports.editList = async (id, args, message, prefix) => {
 			quant[index] -= 1;
 			const test = listBuiler(list);
 			await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: test	});
-			return test;
+			return true;
 		}
 		// deducts the mon selected
 		else {
 			quant[index] -= 1;
 			const test = listBuiler(list);
 			await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: test	});
-			return test;
+			return true;
 		}
 	}
 
@@ -213,10 +213,19 @@ module.exports.sendMsg = async (id, prefix, message) => {
 
 };
 
-module.exports.checkMon = async (id, mon, message) => {
+// eslint-disable-next-line no-unused-vars
+module.exports.check = async (id, mon, message) => {
 	const { list } = await GIVESCHEMA.findOne({
 		_id: id,
 	});
-	console.log(mon);
-	console.log(list.hasOwnProperty(`${ mon}`));
+	const status = Object.keys(list.status).every((k) => list.status[k] === false);
+	if (status) {
+		message.reply('your giveaway has already ended!');
+		return false;
+	}
+	if (!list.mon.includes(`${ mon}`)) {
+		message.reply(`that pokemon is not on your list\nAvailable pokemon: \`${list.mon.join(', ')}\`\nPokemon given: \`${ mon }\``);
+		return false;
+	}
+	return true;
 };
