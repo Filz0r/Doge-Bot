@@ -88,6 +88,7 @@ module.exports.setList = async (id, args) => {
 	if(list !== null) {
 		data = [];
 		mons = {};
+		i = 0;
 		do {
 			mons = {
 				mon: args[i],
@@ -95,9 +96,7 @@ module.exports.setList = async (id, args) => {
 				status: true,
 			};
 			i = i + 2;
-            data.push(mons);
-            console.log(mons);
-            console.log(data);
+			data.push(mons);
 		} while (i < argnum);
 		/* console.log(data);
 		console.log(mons);
@@ -107,6 +106,7 @@ module.exports.setList = async (id, args) => {
 	else if (list === null) {
 		data = [];
 		mons = {};
+		i = 0;
 		do {
 			mons = {
 				mon: args[i],
