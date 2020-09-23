@@ -82,10 +82,10 @@ module.exports.setList = async (id, args) => {
 	let data = [];
 	let mons = {};
 	const argnum = args.length;
-	const { list } = await GIVESCHEMA.findOne({
+	const result = await GIVESCHEMA.findOne({
 		_id: id,
 	});
-	if(list !== null) {
+	if(result !== null) {
 		data = [];
 		mons = {};
 		i = 0;
@@ -100,7 +100,7 @@ module.exports.setList = async (id, args) => {
 		} while (i < argnum);
 		return await GIVESCHEMA.findOneAndUpdate({ _id: id }, { list: data	});
 	}
-	else if (list === null) {
+	else if (result === null) {
 		data = [];
 		mons = {};
 		i = 0;
@@ -113,7 +113,8 @@ module.exports.setList = async (id, args) => {
 			i = i + 2;
 			data.push(mons);
 		} while (i < argnum);
-		return await new GIVESCHEMA({ _id: id, list: data	}).save();
+		await GIVESCHEMA.findOneAndUpdate({ _id: id	}, { _id: id, list: data }, { upsert: true });
+		return;
 	}
 };
 // edits the list of pokemon when the user is hosting the giveaway
