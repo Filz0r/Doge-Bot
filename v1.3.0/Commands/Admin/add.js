@@ -1,7 +1,7 @@
 const Command = require('../../Structures/Command.js');
 const userScheema = require('../../schemas/userSchema');
-const { Permissions } = require('discord.js');
 const USERS = require('../../Structures/user');
+const { Permissions } = require('discord.js');
 const permissions = new Permissions([
 	'ADMINISTRATOR',
 	'MANAGE_GUILD',
