@@ -20,13 +20,15 @@ module.exports = class extends Command {
 	// eslint-disable-next-line no-unused-vars
 	async run(message, args) {
 		const { id, tag } = message.author;
+		const { id: guildID } = message.guild;
 		if (message.member.hasPermission(permissions)) {
-			const { id: guildID } = message.guild;
 			const prefix = args[0];
 			const change = await guilds.changePrefix(prefix, guildID, message);
 			if (change) return;
 		}
 		else {
+			const guild = guilds.checkGuild(message);
+			if (guild.admins.includes(id)) return;
 			const reason = await USER.autoModeration(id, tag, message, 3);
 			await USER.tellMod(message, id, reason);
 			return;
