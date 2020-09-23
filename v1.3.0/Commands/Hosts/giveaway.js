@@ -91,7 +91,9 @@ module.exports = class extends Command {
 			}
 		}
 		else {
-			await USER.autoModeration(id, tag, message);
+			const reason = await USER.autoModeration(id, tag, message, 4);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 	}
 };
