@@ -1,6 +1,7 @@
 const Event = require('../Structures/Event');
 const mongo = require('./../Structures/mongo');
 
+
 module.exports = class extends Event {
 
 	constructor(...args) {
