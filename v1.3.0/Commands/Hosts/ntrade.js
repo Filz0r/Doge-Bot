@@ -15,7 +15,7 @@ module.exports = class extends Command {
 
 	async run(message, args) {
 		const { id, tag } = message.author;
-		const { host } = await USER.checkUser(id, tag, message);
+		const { host } = await USER.checkUser(id, tag);
 		if(host) {
 			const argnum = args.length;
 			const check = await GIVEAWAY.check(id, args[0], message);
