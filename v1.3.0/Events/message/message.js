@@ -25,9 +25,11 @@ module.exports = class extends Event {
 		}
 		else {
 			const flags = users.flags;
-			if (flags >= 5) return await USER.autoModeration(id, tag, message);
-			else await USER.flagUser(id);
-			return message.reply(`invalid command! Use \`${this.client.prefix}help\` to see my valid commands!\nIf you keep trying to use non existing commands I might end up ignoring you! :angry:`);
+			if (flags >= 0) {
+				const reason = await USER.autoModeration(id, tag, message, 0);
+				await USER.tellMod(message, id, reason);
+			}
+			return;
 		}
 	}
 };

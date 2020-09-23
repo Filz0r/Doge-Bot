@@ -20,7 +20,6 @@ module.exports = class extends Command {
 	async run(message) {
 		const { id, tag } = message.author;
 		const USER = await check.checkUser(id, tag);
-		let flag = 0;
 		if(!USER.block) {
 			const core = os.cpus()[0];
 			const embed = new MessageEmbed()
@@ -53,9 +52,9 @@ module.exports = class extends Command {
 			message.channel.send(embed);
 		}
 		if(USER.block) {
-			message.reply('you are blocked from using me!');
-			flag++;
-			flag > 3 ? message.channel.send('<@' + this.client.admin[0] + '> a user has been blocked and is still trying to use me!\n the user is: <@' + id + '>') && message.client.users.cache.get(this.client.owners[0]).send('Master this user tried to use me after being blocked! <@' + id + '>') : '';
+			const reason = await USER.autoModeration(id, tag, message, 9);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 	}
 

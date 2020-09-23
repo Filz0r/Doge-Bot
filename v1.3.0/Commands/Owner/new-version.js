@@ -1,6 +1,7 @@
 const { MessageEmbed } = require('discord.js');
 const Command = require('../../Structures/Command');
 const { version } = require('../../package.json');
+const USER = require('../../Structures/user');
 module.exports = class extends Command {
 
 	constructor(...args) {
@@ -12,8 +13,7 @@ module.exports = class extends Command {
 	}
 
 	async run(message) {
-		const masterID = this.client.owners[0];
-		const { id } = message.author;
+		const { id, tag } = message.author;
 		if (this.client.owners.includes(id)) {
 			const embed = new MessageEmbed()
 				.setColor(message.guild.me.displayHexColor || 'BLUE')
@@ -21,10 +21,9 @@ module.exports = class extends Command {
 			message.channel.send(embed);
 		}
 		else {
-			message.reply(' you do not have permission to do this! :angry:');
-			message.channel.send('<@' + masterID + '> this user used an owner command! <@' + id + '>');
-			message.client.users.cache.get(masterID).send('Master this user tried to use an owner command! <@' + id + '>');
-			return console.log(`id-${id} tried to run the new version command`);
+			const reason = await USER.autoModeration(id, tag, message, 10);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 
 	}

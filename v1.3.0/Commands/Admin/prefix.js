@@ -1,6 +1,6 @@
 const Command = require('../../Structures/Command.js');
 const guilds = require('../../Structures/guilds');
-const user = require('../../Structures/user');
+const USER = require('../../Structures/user');
 const { Permissions } = require('discord.js');
 const permissions = new Permissions([
 	'ADMINISTRATOR',
@@ -27,7 +27,9 @@ module.exports = class extends Command {
 			if (change) return;
 		}
 		else {
-			await user.autoModeration(id, tag, message, 3);
+			const reason = await USER.autoModeration(id, tag, message, 3);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 	}
 };

@@ -1,11 +1,11 @@
 const { MessageEmbed } = require('discord.js');
-const check = require('../../Structures/user.js');
+const USER = require('../../Structures/user.js');
 const Command = require('../../Structures/Command');
 const { Permissions } = require('discord.js');
 const permissions = new Permissions([
 	'MANAGE_CHANNELS',
 ]);
-let flag = 0;
+
 
 module.exports = class extends Command {
 	constructor(...args) {
@@ -18,7 +18,7 @@ module.exports = class extends Command {
 
 	async run(message, [command]) {
 		const { id, tag } = message.author;
-		const checking = await check.checkUser(id, tag);
+		const checking = await USER.checkUser(id, tag);
 		let host = false;
 		checking !== null ? host = await checking.host : host;
 
@@ -76,13 +76,9 @@ module.exports = class extends Command {
 			}
 
 		}
-		if(checking.block && flag < 3) {
-			message.reply('you are blocked from using me!');
-			return flag++;
-		}
-		if(flag >= 3) {
-			await check.autoModeration(id, tag, message);
-			message.client.users.cache.get(this.client.owners[0]).send('Master this user tried to use me after being blocked! <@' + id + '>');
+		if(checking.block) {
+			const reason = await USER.autoModeration(id, tag, message, 9);
+			await USER.tellMod(message, id, reason);
 			return;
 		}
 	}

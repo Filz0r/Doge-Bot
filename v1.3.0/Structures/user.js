@@ -27,6 +27,7 @@ module.exports.checkUser = async (id, tag) => {
 // This is the script that flags and blocks users automatically
 module.exports.autoModeration = async (id, tag, message, reason) => {
 	const reasons = {
+		0: 	'trying to use non existing commands',
 		1:	'trying to add users has hosts',
 		2:	'trying to block users from using me',
 		3:	'trying to change my prefix for this server',
@@ -34,6 +35,9 @@ module.exports.autoModeration = async (id, tag, message, reason) => {
 		5:	'trying to use the raid command',
 		6:	'trying to change the dens information',
 		7: 	'trying to kill me',
+		8:	'trying to use the nextrade command',
+		9:	'trying to use the bot after being blocked',
+		10: 'using owner only commands',
 
 	};
 	// eslint-disable-next-line prefer-const

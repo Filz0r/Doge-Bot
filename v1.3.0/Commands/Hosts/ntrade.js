@@ -38,7 +38,9 @@ module.exports = class extends Command {
 			}
 		}
 		else {
-			return await USER.autoModeration(id, tag, message);
+			const reason = await USER.autoModeration(id, tag, message, 8);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 
 	}

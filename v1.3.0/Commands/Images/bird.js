@@ -25,7 +25,6 @@ module.exports = class extends Command {
 	async run(message) {
 		const { id, tag } = message.author;
 		const USER = await check.checkUser(id, tag);
-		let flag = 0;
 		if(!USER.block) {
 			const data = await fetch(`https://imgur.com/r/${subreddits[Math.floor(Math.random() * subreddits.length)]}/hot.json`)
 				.then(response => response.json())
@@ -35,12 +34,9 @@ module.exports = class extends Command {
 			return message.reply('A picture has been sent to your dm!');
 		}
 		else if(USER.block) {
-			message.reply('you are blocked from using me!');
-			return flag++;
-		}
-		if(flag > 3) {
-			message.client.users.cache.get(this.client.owners[0]).send('Master this user tried to use me after being blocked! <@' + id + '>');
-			return message.channel.send('<@' + this.client.admin[0] + '> a user has been blocked and is still trying to use me!\n the user is: <@' + id + '>');
+			const reason = await USER.autoModeration(id, tag, message, 9);
+			await USER.tellMod(message, id, reason);
+			return;
 		}
 	}
 };
