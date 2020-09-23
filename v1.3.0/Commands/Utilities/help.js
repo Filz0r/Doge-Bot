@@ -1,5 +1,6 @@
 const { MessageEmbed } = require('discord.js');
 const USER = require('../../Structures/user.js');
+const GUILD = require('../../Structures/guilds');
 const Command = require('../../Structures/Command');
 const { Permissions } = require('discord.js');
 const permissions = new Permissions([
@@ -21,7 +22,8 @@ module.exports = class extends Command {
 		const checking = await USER.checkUser(id, tag);
 		let host = false;
 		checking !== null ? host = await checking.host : host;
-
+		const guild = await GUILD.checkGuild(message);
+		const prefix = guild.prefix !== this.client.prefix ? guild.prefix : this.client.prefix;
 		if(!checking.block) {
 			const embed = new MessageEmbed()
 				.setColor('BLUE')
@@ -46,8 +48,8 @@ module.exports = class extends Command {
 			}
 			else {
 				embed.setDescription([
-					`**❯** The bot prefix is: ${this.client.prefix}`,
-					`**❯** You can also use ${this.client.prefix}help \`<commandname>\` to get additional help on the command you request`,
+					`**❯** The bot prefix is: \`${prefix}\``,
+					`**❯** You can also use ${prefix}${this.client.commands.get('help').name} \`<commandname>\` to get additional help on the command you request`,
 					'**❯** Command Parameters: `<>` is mandatory and `[]` is optional',
 					'**❯ If you want to become an authorized host just and moderator, he will add you when possible!**',
 					'**❯ DO NOT TRY TO USE COMMANDS THAT DON\'T SHOW UP IN YOUR HELP COMMAND!**',
