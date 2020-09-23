@@ -41,14 +41,15 @@ module.exports = class extends Command {
 					`**❯ Category:** ${cmd.category} `,
 					`**❯ Usage:** ${cmd.usage}`,
 				]);
-				return message.client.users.cache.get(id).send(embed);
+				message.client.users.cache.get(id).send(embed);
+				return message.reply('my help menu has been sent to your dm!');
 			}
 			else {
 				embed.setDescription([
 					`**❯** The bot prefix is: ${this.client.prefix}`,
 					`**❯** You can also use ${this.client.prefix}help \`<commandname>\` to get additional help on the command you request`,
-					'**❯** Command Parameters: `<>` is mandatory & `[]` is optional',
-					'**❯ If you want to become an authorized host just ping my creator, he will add you when possible!**',
+					'**❯** Command Parameters: `<>` is mandatory and `[]` is optional',
+					'**❯ If you want to become an authorized host just and moderator, he will add you when possible!**',
 					'**❯ DO NOT TRY TO USE COMMANDS THAT DON\'T SHOW UP IN YOUR HELP COMMAND!**',
 
 				]);
@@ -63,7 +64,6 @@ module.exports = class extends Command {
 				}
 				else {
 					categories = this.client.utils.removeDuplicates(this.client.commands
-						.filter(cmd => cmd.category !== 'Owner')
 						.map(cmd => cmd.category));
 				}
 
