@@ -5,6 +5,9 @@ const USERS = require('../../Structures/user');
 const permissions = new Permissions([
 	'ADMINISTRATOR',
 	'MANAGE_GUILD',
+	'BAN_MEMBERS',
+	'KICK_MEMBERS',
+	'MANAGE_CHANNELS',
 ]);
 module.exports = class extends Command {
 
