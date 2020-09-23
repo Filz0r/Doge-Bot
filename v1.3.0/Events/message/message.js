@@ -1,12 +1,14 @@
 const Event = require('../../Structures/Event');
 const USER = require('../../Structures/user');
-
+const GUILD = require('../../Structures/guilds');
 module.exports = class extends Event {
 
 	async run(message) {
 		const mentPrefix = `<@!${this.client.user.id}>`;
 		const { id, tag } = message.author;
-		const prefix = message.content.startsWith(mentPrefix) ? mentPrefix : this.client.prefix;
+		if (message.guild === null) return;
+		const guilds = await GUILD.checkGuild(message);
+		const prefix = guilds.prefix ? guilds.prefix : message.content.startsWith(mentPrefix) ? mentPrefix : this.client.prefix ;
 		if (!message.content.startsWith(prefix) || !message.guild || message.author.bot) return;
 
 		let users = await USER.checkUser(id, tag);
