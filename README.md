@@ -1,7 +1,6 @@
-# Doge-Bot
- 
--This code is for an Discord bot, it requires for the user to have and mongoDB database already set up, as well as a discord bot token.
--Permanent invite link for this bot: https://discord.com/oauth2/authorize?client_id=742884972565626902&scope=bot
+# Doge-Bot 
+    -This code is for an Discord bot, it requires for the user to have and mongoDB database already set up, as well as a discord bot token.
+    -Permanent invite link for this bot: https://discord.com/oauth2/authorize?client_id=742884972565626902&scope=bot
 
 # Version 1.3.0 changelog:
     -Separating the users database into various other databases so that I would not need to have queries so complex as there are on the previous version.
