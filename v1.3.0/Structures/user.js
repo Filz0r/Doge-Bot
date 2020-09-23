@@ -24,41 +24,37 @@ module.exports.checkUser = async (id, tag) => {
 	}
 };
 
-// blocks the user
-module.exports.blockUser = async (id) => {
-	const result = await userSchema.findOneAndUpdate({ _id: id }, {	block: true });
-	const block = result.block;
-	console.log(`user id ${ id } was blocked`);
-	return block;
-};
-
-// flags user for using commands he does not have access to
-module.exports.flagUser = async (id) => {
-	const addFlag = await userSchema.findOneAndUpdate({	_id: id }, { $inc: { flags: 1 } });
-	const flags = addFlag.flags;
-	console.log(`user ${ id } was flagged`);
-	return flags;
-};
-
 // This is the script that flags and blocks users automatically
-module.exports.autoModeration = async (id, tag, message) => {
+module.exports.autoModeration = async (id, tag, message, reason) => {
+	const reasons = {
+		1:	'trying to add users has hosts',
+		2:	'trying to block users from using me',
+		3:	'trying to change my prefix for this server',
+		4:  'trying to use the giveaway command',
+		5:	'trying to use the raid command',
+		6:	'trying to change the dens information',
+		7: 	'trying to kill me',
+
+	};
 	// eslint-disable-next-line prefer-const
 	let { block, flags, ignoreFlags } = await this.checkUser(id, tag);
+	const { name } = message.guild;
 	if(flags < 0) return console.log(`ERROR: user ${ tag } has invalid flags: ${ flags }`);
 	if(flags > 10) return console.log(`ERROR: user ${ tag } has invalid flags ${ flags }`);
 	if(ignoreFlags < 0) return console.log(`ERROR: user ${ tag } has invalid flags: ${ flags }`);
 	if(ignoreFlags > 10) return console.log(`ERROR: user ${ tag } has invalid flags ${ flags }`);
 	if(flags >= 0 && flags <= 9 && !block) {
 		flags++;
-		await userSchema.findOneAndUpdate({ _id: id }, { flags: flags });
+		await userSchema.findOneAndUpdate({ _id: id }, { flags });
 		if (flags === 10) {
 			await userSchema.findOneAndUpdate({ _id: id }, { block: true });
-			console.log(`user ${ tag } was blocked!`);
-			return message.reply(' you are now blocked from using me!');
+			console.log(`user ${ tag } was blocked for having to many flags!`);
+			return message.reply('you are now blocked from using me!');
 		}
 		else {
-			console.log(`user ${ tag } was flagged ${ flags } times!`);
-			return message.reply(`You are not allowed to use/do this!\n\`Current flags: ${flags}/10\``);
+			console.log(`${ tag } was flagged for ${ reasons[reason] } on ${ name }, total flags : ${ flags }`);
+			message.client.users.cache.get(id).send(`You were flaged for: \`${ reasons[reason] }\`\n\`Current flags: ${ flags }/10\``);
+			return reasons[reason];
 		}
 	}
 	else if(block) {
@@ -73,5 +69,18 @@ module.exports.autoModeration = async (id, tag, message) => {
 			console.log(`${ tag }, is working his way up to me ignoring him ${ ignoreFlags }`);
 			return message.reply(`I already blocked you, if you keep trying I'll start ignoring you!\n\`Flags:${ ignoreFlags }/10\``);
 		}
+	}
+};
+
+module.exports.tellMod = async (message, id, reason) => {
+	const activeAdmin = message.guild.members.cache.filter(member => member.permissions.has('BAN_MEMBERS') && member.presence.status !== 'offline' && member.user.bot === false)
+		.map(member => member.user.id);
+	const noAdmin = activeAdmin.length === 0;
+	if (noAdmin) {
+		message.channel.send(`<@${ message.guild.ownerID }> the user <@${ id }> was flagged for \`${ reason }\`\nThere were no mods online he did this so I am reporting to you`);
+	}
+	else {
+		const i = Math.floor(Math.random() * activeAdmin.length);
+		message.channel.send(`<@${activeAdmin[i]}> the user <@${ id }> was flagged for \`${ reason }\``);
 	}
 };
