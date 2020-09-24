@@ -28,7 +28,7 @@ module.exports = class extends Command {
 		}
 		else {
 			const guild = guilds.checkGuild(message);
-			if (guild.admins.includes(id)) return;
+			if (guild.admins.includes(id) || id === this.client.owners[0]) return;
 			const reason = await USER.autoModeration(id, tag, message, 3);
 			await USER.tellMod(message, id, reason);
 			return;
