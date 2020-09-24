@@ -1,15 +1,23 @@
 const guildSchema = require('../schemas/guildSchema');
+const { Permissions } = require('discord.js');
+const permissions = new Permissions([
+	'ADMINISTRATOR',
+	'MANAGE_GUILD',
+	'BAN_MEMBERS',
+	'KICK_MEMBERS',
+	'MANAGE_CHANNELS',
+]);
 
 module.exports.checkGuild = async (message) => {
 	const { id: guildID, name, ownerID } = message.guild;
-	const admins = !message.guild.members.cache ? [ ownerID ] : message.guild.members.cache.filter(member => member.permissions.has('ADMINISTRATOR') && member.user.bot === false)
+	const admins = !message.guild.members.cache ? [ ownerID ] : message.guild.members.cache.filter(member => member.permissions.has(permissions) && !member.user.bot)
 		.map(member => member.user.id);
 	const prefix = message.client.prefix;
-	const result = await guildSchema.findOne({ _id: guildID });
+	let result = await guildSchema.findOne({ _id: guildID });
 
 
 	if (result === null) {
-		const nGuild = await new guildSchema({
+		result = await new guildSchema({
 			_id: guildID,
 			guildName: name,
 			ownerID,
@@ -17,7 +25,18 @@ module.exports.checkGuild = async (message) => {
 			prefix,
 		}).save();
 		console.log(`I was added to ${ name }!`);
-		return nGuild;
+		return result;
+	}
+	if (result !== null) {
+		result = await guildSchema.findOneAndUpdate({
+			_id: guildID,
+		},
+		{
+			guildName: name,
+			ownerID,
+			admins,
+		});
+		return result;
 	}
 	return result;
 };
