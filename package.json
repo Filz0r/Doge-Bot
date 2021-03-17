@@ -1,0 +1,31 @@
+{
+  "name": "dogebot",
+  "version": "1.4.0",
+  "description": "New Refractored version of dogebot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Filz0r/dogebot.git"
+  },
+  "author": "Filipe Figueiredo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Filz0r/dogebot/issues"
+  },
+  "homepage": "https://github.com/Filz0r/dogebot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.1",
+    "fetch": "^1.1.0",
+    "glob": "^7.1.6",
+    "got": "^11.8.2",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.19",
+    "os": "^0.1.1",
+    "path": "^0.12.7",
+    "snekfetch": "^4.0.4",
+    "util": "^0.12.3"
+  }
+}
