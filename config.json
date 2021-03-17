@@ -1,0 +1,6 @@
+{
+	"prefix": "&", 
+    "token": "bot-toke-goes-here",
+    "mongoPath": "mongodb-URI-goes-here",
+    "owners": ["your-discord-account-id-goes-here"]
+}
