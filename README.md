@@ -1,3 +1,4 @@
+# EDIT: This repo is currently being restructured, while this message is present this is in the works, please chech branch v1.3.0 for more information on the current version that is online, there is also a new version in the works, the README will only be updated again when I'm ready to push it to the stable branch, for now you can track the development on the development branch, that is if I don't forget to create it and bring my changes over there 😅
 # Doge-Bot 
     -This code is for an Discord bot, it requires for the user to have and mongoDB database already set up,
     as well as a discord bot token.
@@ -13,7 +14,7 @@
     -Added Discord permissions for admin commands, meaning only users that have certain permissions
     that are written on the files they are needed to use those commands.
     -Created an guild collection on the database that stores all the settings each guild the bot is in.
-    -Deleted a few files and condensed all of the command functions in individual files that execute them when requested.
+    -Deleted a few files and condensed all of the commstableand functions in individual files that execute them when requested.
 
 
 # DogeBot v1.2.5 changelog:
