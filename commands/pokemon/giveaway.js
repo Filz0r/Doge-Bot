@@ -22,7 +22,7 @@ module.exports = class extends Command {
 		const { host, block } = await USERS.checkUser(id, tag);
 		const argnum = args.length;
 		const subcmd = args[0].toLowerCase();
-		if (host && !block) {
+		if (!block && host) {
 			if (subcmd === 'start' && argnum > 2) return message.reply(`incorrect syntax!\n Use \`${this.client.prefix}${this.client.commands.get('giveaway').name} guide\` for help!`);
 			if (subcmd === 'info' && argnum !== 6) return message.reply(`incorrect syntax!\n Use \`${this.client.prefix}${this.client.commands.get('giveaway').name} guide\` for help!`);
 			if (subcmd !== 'desc' && argnum >= 61) return message.reply('you are trying to give to many pokemon, limit is 30!');
@@ -97,7 +97,7 @@ module.exports = class extends Command {
 			prefix === this.client.prefix ? prefix = this.client.prefix : prefix
 			return message.reply(`It seems like you didn't activate this funcionality yet!\nUse \`${prefix}host\` to activate it!`);
 		}
-		else if (!host && block || host && block) {
+		else if (block && !host || block && host) {
 			const reason = await AUTOMOD.autoModeration(id, tag, message, 6);
 			return await AUTOMOD.tellMod(message, id, reason);			
 		}

@@ -8,7 +8,7 @@ module.exports = class extends Command {
 		super(...args, {
 			aliases: ['latency', 'pingcheck', 'p'],
 			description: 'This provides the ping of the bot',
-			category: 'Information',
+			category: 'Bot Related/Information',
 		});
 	}
 
@@ -24,7 +24,7 @@ module.exports = class extends Command {
 			msg.edit(`${response} - Bot Latency: \`${latency}ms\`, API Latency: \`${Math.round(this.client.ws.ping)}ms\``);
 		}
 		else {
-			const reason = await AUTOMOD.autoModeration(id, tag, message, 9);
+			const reason = await AUTOMOD.autoModeration(id, tag, message, 6);
 			return await AUTOMOD.tellMod(message, id, reason);
 		}
 	}

@@ -1,6 +1,8 @@
 const userSchema = require('../models/users');
-const GUILD = require('../controller/guilds');
-const USER = require('../controller/users')
+const GUILD = require('./guilds');
+const USER = require('./users');
+const ERRORS = require('./api-error');
+const { ownerID } = require('../server')
 
 // This is the function that flags and blocks users automatically
 module.exports.autoModeration = async (id, tag, message, reason) => {
@@ -13,7 +15,8 @@ module.exports.autoModeration = async (id, tag, message, reason) => {
 		4: 'trying to change the Raid dens information (Bot owner only command)',
 		5: 'trying to kill me (Bot owner only command)',
 		6: 'trying to use the bot after being blocked',
-		7: 'trying to change/set the log output channel (Server Admin only command)'
+		7: 'trying to change/set the log output channel (Server Admin only command)',
+		8: 'Trying to make me ignore an other user (Owner only command)'
 
 	};
 	let { block, flags, ignoreFlags } = await USER.checkUser(id, tag);
@@ -32,13 +35,23 @@ module.exports.autoModeration = async (id, tag, message, reason) => {
 			// Tell the user he was blocked from using commands
 			await userSchema.findOneAndUpdate({ _id: id }, { block: true });
 			console.log(`user ${tag} was blocked for having to many flags!`);
-			return message.reply('you are now blocked from using me!');
+			return message.reply('you are now blocked from using me!').catch(async error => {
+				return await ERRORS.errorHandler(error, message, ownerID)				
+			});
 		}
 		else {
 			// Otherwise it sends a DM to the user telling why they were flagged and returns the reason why he got flagged to use
 			// in the tellMod function
 			console.log(`${tag} was flagged for ${reasons[reason]} on ${name}, total flags : ${flags}`);
-			message.client.users.cache.get(id).send(`You were flaged for: \`${reasons[reason]}\`\n\`Current flags: ${flags}/10\``);
+			message.client.users.cache
+				.get(id)
+				.send(`You were flaged for: \`${reasons[reason]}\`\n\`Current flags: ${flags}/10\``)
+				.catch(async error => {
+					return await ERRORS.errorHandler(error, message, ownerID) && message.reply(`You were flaged for: \`${reasons[reason]}\`\n\`Current flags: ${flags}/10\``)
+					.catch(async err => {
+						return await ERRORS.errorHandler(err, message, ownerID)
+					});		
+				});
 			return reasons[reason];
 		}
 	}
@@ -48,11 +61,15 @@ module.exports.autoModeration = async (id, tag, message, reason) => {
 		if (ignoreFlags >= 10) {
 			await userSchema.findOneAndUpdate({ _id: id }, { ignore: true });
 			console.log(`user ${tag} is now going to be ignored!`);
-			return message.reply('congratulations, from now on I will completely ignore your commands!');
+			return message.reply('congratulations, from now on I will completely ignore your commands!').catch(async error => {
+				return await ERRORS.errorHandler(error, message, ownerID)				
+			});
 		}
 		else {
 			console.log(`${tag}, is working his way up to me ignoring him ${ignoreFlags}`);
-			return message.reply(`I already blocked you, if you keep trying I'll start ignoring you!\n\`Flags:${ignoreFlags}/10\``);
+			return message.reply(`I already blocked you, if you keep trying I'll start ignoring you!\n\`Flags:${ignoreFlags}/10\``).catch(async error => {
+				return await ERRORS.errorHandler(error, message, ownerID)				
+			});
 		}
 	}
 };
@@ -62,8 +79,7 @@ module.exports.tellMod = async (message, id, reason) => {
 	const { logOut } = await GUILD.checkGuild(message);
 	// If there is it sends a report there
 	if (logOut !== 'none') {
-		message.guild.channels.cache.get(logOut).send(`The user <@${id}> was flagged for \`${reason}\``);
-		return;
+		return message.guild.channels.cache.get(logOut).send(`The user <@${id}> was flagged for \`${reason}\``);
 	} else {
 		// Then it finds out if there is anyone with the permission to ban members in the server that is online
 		const activeAdmin = message.guild.members.cache.filter(member => member.permissions.has('BAN_MEMBERS') && member.presence.status !== 'offline' && member.user.bot === false)
@@ -71,14 +87,12 @@ module.exports.tellMod = async (message, id, reason) => {
 		const noAdmin = activeAdmin.length === 0;
 		// If no online admins it pings the server owner
 		if (noAdmin) {
-			message.channel.send(`<@${message.guild.ownerID}> the user <@${id}> was flagged for \`${reason}\`\nThere were no mods online he did this so I am reporting to you`);
-			return;
+			return message.channel.send(`<@${message.guild.ownerID}> the user <@${id}> was flagged for \`${reason}\`\nThere were no mods online he did this so I am reporting to you`);
 		}
 		// If there are any admins online it picks a random one and reports to them
 		else {
 			const i = Math.floor(Math.random() * activeAdmin.length);
-			message.channel.send(`<@${activeAdmin[i]}> the user <@${id}> was flagged for \`${reason}\``);
-			return;
+			return message.channel.send(`<@${activeAdmin[i]}> the user <@${id}> was flagged for \`${reason}\``);
 		}
 	}
 };

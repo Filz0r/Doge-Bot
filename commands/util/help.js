@@ -16,6 +16,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			name: 'help',
+			category: 'Utilities/Misc',
 			description: 'List all of my commands or info about a specific command.',
 		});
 	}

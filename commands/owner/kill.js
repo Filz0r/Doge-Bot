@@ -5,7 +5,7 @@ module.exports = class extends Command {
 		super(...args, {
 			name: 'kill',
 			category: 'Owner',
-			description: '-ADMIN ONLY DO NOT TRY!-',
+			description: 'OWNER ONLY DO NOT TRY!',
 		});
 	}
 	async run(message) {
