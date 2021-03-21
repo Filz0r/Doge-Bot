@@ -7,7 +7,7 @@ module.exports.updateNotice = async (message) => {
     const embed = new MessageEmbed()
     .setColor(message.guild.me.displayHexColor || 'BLUE')
     .addField('New Update!', `**DogeBot v${version} is now online!**`)
-    .addField('Changelog:', 'https://github.com/Filz0r/Doge-Bot/blob/development/changelog.md');
+    .addField('Changelog:', 'https://github.com/Filz0r/Doge-Bot/blob/latest/changelog.md');
     for(guild in all) {
         if (all[guild].logOut !== 'none') {
         logOutArr.push(all[guild].logOut)
