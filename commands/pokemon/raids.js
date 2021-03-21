@@ -8,7 +8,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			name: 'raid',
-			category: 'Hosts',
+			category: 'Pokemon',
 			description: 'set a the description for your shiny raid',
 			usage: ' **guide** for an detailed guide on how to use this command',
 			args: true,
