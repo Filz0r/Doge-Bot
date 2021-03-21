@@ -1,7 +1,6 @@
 const raidSchema = require('../models/raids');
 const denSchema = require('../models/dens');
 const activeRaids = require('../models/activeRaids');
-const fetch = require('node-fetch')
 
 module.exports.setRaidInfo = async (id, args) => {
 	let result = await raidSchema.findOne({ _id: id });

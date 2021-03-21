@@ -9,7 +9,7 @@ module.exports = class extends Command {
 		super(...args, {
 			name: 'raid',
 			category: 'Pokemon',
-			description: 'set a the description for your shiny raid',
+			description: 'Create and publish pokemon sw/sh raid announcements.',
 			usage: ' **guide** for an detailed guide on how to use this command',
 			args: true,
 		});

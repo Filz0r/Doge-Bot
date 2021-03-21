@@ -4,10 +4,6 @@ const reqString = {
 	type: String,
 	required: true,
 };
-const reqBoolean = {
-	type: Boolean,
-	required: false,
-};
 const string = {
 	type: String,
 	required: false,
