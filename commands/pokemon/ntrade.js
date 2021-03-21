@@ -7,7 +7,7 @@ module.exports = class extends Command {
 		super(...args, {
 			name: 'nextrade',
 			aliases: ['ntrade', 'nt', 'nextrade', 'nexttrade'],
-			category: 'Hosts',
+			category: 'Pokemon',
 			description: 'Starts next trade and deducts the mon that the last winner chose',
 			usage: '<previousPokemon> CASE SENSITIVE',
 			args: true,

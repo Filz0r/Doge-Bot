@@ -78,3 +78,7 @@ module.exports = class Util {
 		});
 	}
 };
+
+module.exports.getRandomNum = async (min, max) => {
+	return Math.floor(Math.random() * (max - min) + min);
+}

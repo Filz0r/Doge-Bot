@@ -194,8 +194,8 @@ module.exports.raidSwitch = async (state, authorID, message, msgID, channelID, g
 			message.reply('has fineshed hosting for the day')
 			const active = result.active
 			for(guild in active) {
-				const msgID = result.active[guild][1]
-				const channel = result.active[guild][0]
+				const msgID = active[guild][1]
+				const channel = active[guild][0]
 				// Up until .get(channel) you get the channel where it was sent
 				// to get the message after channel you need to .message.fetch('id')
 				const channelOfMsgToEdit = await message.client.channels.cache.get(channel)

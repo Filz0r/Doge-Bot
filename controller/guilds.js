@@ -51,6 +51,6 @@ module.exports.changePrefix = async (prefix, guildID, message) => {
 module.exports.setLogChannel = async (guildID, channelID, message) => {
 	let result = await guildSchema.findOne({ _id: guildID });
 	result === null ? this.checkGuild(message) : result = await guildSchema.findOneAndUpdate({ _id: guildID }, { logOut: channelID });
-	message.reply(` #${channelID} is now my log output!`);
+	message.reply(` <#${channelID}> is now my log output!`);
 	return true;
 };

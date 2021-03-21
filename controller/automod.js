@@ -16,7 +16,8 @@ module.exports.autoModeration = async (id, tag, message, reason) => {
 		5: 'trying to kill me (Bot owner only command)',
 		6: 'trying to use the bot after being blocked',
 		7: 'trying to change/set the log output channel (Server Admin only command)',
-		8: 'Trying to make me ignore an other user (Owner only command)'
+		8: 'Trying to make me ignore an other user (Owner only command)',
+		9: 'Trying to use an owner only command'
 
 	};
 	let { block, flags, ignoreFlags } = await USER.checkUser(id, tag);

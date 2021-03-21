@@ -1,7 +1,5 @@
 const GIVESCHEMA = require('../models/giveaways');
-function getRandomNum(min, max) {
-	return Math.floor(Math.random() * (max - min) + min);
-}
+const { getRandomNum } = require('../controller/util')
 let i = 0;
 // generates random codes
 module.exports.randCode = async () => {

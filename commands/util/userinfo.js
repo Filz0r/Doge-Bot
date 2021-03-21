@@ -9,7 +9,7 @@ module.exports = class extends Command {
 	constructor(...args) {
 		super(...args, {
 			description: 'Displays information about a provided user or the message author.',
-			category: 'Information/Misc',
+			category: 'Utilities/Misc',
 			usage: '[user]',
 		});
 	}
