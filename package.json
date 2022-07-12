@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Filz0r/dogebot.git"
+    "url": "git+https://github.com/Filz0r/doge-bot.git"
   },
   "author": "Filipe Figueiredo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Filz0r/dogebot/issues"
+    "url": "https://github.com/Filz0r/doge-bot/issues"
   },
-  "homepage": "https://github.com/Filz0r/dogebot#readme",
+  "homepage": "https://github.com/Filz0r/doge-bot#readme",
   "dependencies": {
     "discord.js": "^12.5.1",
     "fetch": "^1.1.0",
